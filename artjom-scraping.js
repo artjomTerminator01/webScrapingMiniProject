@@ -5,7 +5,6 @@ async function scrape() {
   const page = await browser.newPage();
 
   let cars = [];
-  let counter = 0;
   await page.goto("https://jmvmotors.ee/rent/");
   let pageNumbers = await page.$$("a.page-numbers");
 
@@ -19,7 +18,6 @@ async function scrape() {
     const carsAmount = await page.$$("div.row.mt-3.cars-list-item");
 
     for (i = 1; i < carsAmount.length + 1; i++) {
-      counter++;
       const nameElement = await page.waitForSelector(
         "#cars-list > div:nth-child(" +
           i +
@@ -87,7 +85,8 @@ async function scrape() {
   }
 
   console.log(cars);
-  console.log(counter);
   browser.close();
 }
-scrape();
+
+module.exports = { scrape };
+//scrape();
