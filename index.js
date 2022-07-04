@@ -1,4 +1,4 @@
-const jmvMotors = require("./artjom-scraping");
+const jmvMotors = require("./jmv-scraping");
 const sirrentScrapper = require("./sirrent-scraper");
 
 async function scrapper() {

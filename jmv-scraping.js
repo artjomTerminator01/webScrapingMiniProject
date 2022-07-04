@@ -9,6 +9,7 @@ async function scrape() {
   let pageNumbers = await page.$$("a.page-numbers");
 
   for (let j = 2; j <= pageNumbers.length + 1; j++) {
+    //page loop
     if (j > 2) {
       //page number button clicking
       await page.goto("https://jmvmotors.ee/rent/");
@@ -18,6 +19,7 @@ async function scrape() {
     const carsAmount = await page.$$("div.row.mt-3.cars-list-item");
 
     for (i = 1; i < carsAmount.length + 1; i++) {
+      //cars loop
       const nameElement = await page.waitForSelector(
         "#cars-list > div:nth-child(" +
           i +
@@ -83,10 +85,7 @@ async function scrape() {
       cars.push(car);
     }
   }
-
   browser.close();
   return cars;
 }
-
 module.exports = { scrape };
-//scrape();
