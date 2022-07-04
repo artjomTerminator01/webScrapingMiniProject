@@ -84,8 +84,8 @@ async function scrape() {
     }
   }
 
-  console.log(cars);
   browser.close();
+  return cars;
 }
 
 module.exports = { scrape };

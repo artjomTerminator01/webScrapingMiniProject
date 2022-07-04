@@ -1,8 +1,7 @@
 const puppeteer = require("puppeteer");
 
-const goToPage = "https://sirrent.ee/vehicles/";
-
-async function scrape(goToPage) {
+async function scrape() {
+  const goToPage = "https://sirrent.ee/vehicles/";
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
   await page.goto(goToPage);
@@ -19,16 +18,20 @@ async function scrape(goToPage) {
         const carInfo = carTag.querySelectorAll(".attr-value");
         const rentalPrice = carTag.querySelector(".price-big");
         const pricePeriod = carTag.querySelector(".total_days");
+        let currency = carTag.querySelector(".stm-mcr-price-view").innerText;
+        currency =
+          currency.charAt(currency.length - 1) === "€"
+            ? (currency = "EUR")
+            : (currency = "USD");
 
         carsArr.push({
-          car: car.innerText,
-          price: Number(rentalPrice.innerText),
-          price_period: pricePeriod.innerText,
-          currency: "EUR",
-          fuel: carInfo[1].innerText,
+          name: car.innerText,
+          body_type: carInfo[4].innerText,
           transmission: carInfo[2].innerText,
-          seats: carInfo[3].innerText,
-          body: carInfo[4].innerText,
+          fuel: carInfo[1].innerText,
+          price: Number(rentalPrice.innerText),
+          currency: currency,
+          price_period: pricePeriod.innerText,
           site: currentUrl,
         });
       });
@@ -42,11 +45,12 @@ async function scrape(goToPage) {
     });
 
     carsData.push.apply(carsData, grabCars);
+    // If next page exists then go next page, if not then stop while loop
     nextPage == null ? (goNextPage = false) : await page.goto(nextPage);
   }
 
   await browser.close();
-  console.log(carsData);
   return carsData;
 }
-const data = scrape(goToPage);
+
+module.exports = { scrape };

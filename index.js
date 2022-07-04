@@ -1,3 +1,11 @@
-const artjom = require("./artjom-scraping");
+const jmvMotors = require("./artjom-scraping");
+const sirrentScrapper = require("./sirrent-scraper");
 
-console.log(artjom.scrape());
+async function scrapper() {
+  let scrapperData = [];
+  scrapperData.push.apply(scrapperData, await sirrentScrapper.scrape());
+  scrapperData.push.apply(scrapperData, await jmvMotors.scrape());
+  console.log(scrapperData);
+}
+
+scrapper();
