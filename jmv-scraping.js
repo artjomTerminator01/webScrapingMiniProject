@@ -20,30 +20,25 @@ async function scrape() {
 
     for (i = 1; i < carsAmount.length + 1; i++) {
       //cars loop
+      const classPrefix = `#cars-list > div:nth-child(${i}) > div.col-12.col-lg-6.py-3 > `;
+
       const nameElement = await page.waitForSelector(
-        "#cars-list > div:nth-child(" +
-          i +
-          ") > div.col-12.col-lg-6.py-3 > div.d-flex.has-border-bottom.pb-2.mb-4 > h5"
+        classPrefix + "div.d-flex.has-border-bottom.pb-2.mb-4 > h5"
       );
       const bodyTypeElement = await page.waitForSelector(
-        "#cars-list > div:nth-child(" +
-          i +
-          ") > div.col-12.col-lg-6.py-3 > div.row > div:nth-child(1) > div.row.equipment > div:nth-child(1) > b"
+        classPrefix +
+          "div.row > div:nth-child(1) > div.row.equipment > div:nth-child(1) > b"
       );
       const transmissionElement = await page.waitForSelector(
-        "#cars-list > div:nth-child(" +
-          i +
-          ") > div.col-12.col-lg-6.py-3 > div.row > div:nth-child(1) > div.row.equipment > div:nth-child(2) > b"
+        classPrefix +
+          "div.row > div:nth-child(1) > div.row.equipment > div:nth-child(2) > b"
       );
       const fuelElement = await page.waitForSelector(
-        "#cars-list > div:nth-child(" +
-          i +
-          ") > div.col-12.col-lg-6.py-3 > div.row > div:nth-child(1) > div.row.equipment > div:nth-child(3) > b"
+        classPrefix +
+          "div.row > div:nth-child(1) > div.row.equipment > div:nth-child(3) > b"
       );
       const priceElement = await page.waitForSelector(
-        "#cars-list > div:nth-child(" +
-          i +
-          ") > div.col-12.col-lg-6.py-3 > div.row > div:nth-child(1) > div.my-4 > b"
+        classPrefix + "div.row > div:nth-child(1) > div.my-4 > b"
       );
 
       const carName = await page.evaluate(
