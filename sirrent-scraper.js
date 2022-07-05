@@ -10,41 +10,44 @@ async function scrape() {
   let carsData = [];
   while (goNextPage) {
     const carsAmount = await page.$$(".smt-cr-list-loop-wrap");
+    // i = 3, because first 2 elements are unsuitable
+
+    const classPrefix = ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(";
     for (i = 3; i < carsAmount.length + 3; i++) {
       const nameElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-car-info-wrap > div.car-info-top > div.car-data > h3"
       );
       const bodyTypeElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-car-info-wrap > div.car-info-bottom > ul > li:nth-child(5) > div.attr-value > p"
       );
       const transmissionElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-car-info-wrap > div.car-info-bottom > ul > li:nth-child(3) > div.attr-value > p"
       );
       const fuelElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-car-info-wrap > div.car-info-bottom > ul > li:nth-child(2) > div.attr-value > p"
       );
       const priceElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-price-wrap > div.stm_price_info > div.daily_price > div > span.price-big"
       );
 
       const currencyElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-price-wrap > div.stm_price_info > div.daily_price > div > span.currency"
       );
 
       const pricePeriodElement = await page.waitForSelector(
-        ".col-md-9.col-sm-12.col-xs-12 > div:nth-child(" +
+        classPrefix +
           i +
           ") > div.reserv-visible-block > div.reserv-price-wrap > div.stm_price_info > div.total_days"
       );
