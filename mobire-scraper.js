@@ -5,8 +5,25 @@ async function scrape() {
   const page = await browser.newPage();
   await page.goto("https://mobire.ee/en/rental-cars/");
 
-  const hrefs = 8;
+  const hrefs = 15;
   let carArray = [];
+
+  // finds how many cars are on the page but doens't return it (unfinished)
+  //////////////////////////////////////////////////////////
+  /*page.on("response", async (response) => {
+    if (response.url().includes("FeaturedCars")) {
+      const newUrl = await response.url();
+      page.goto(newUrl);
+      const data = await page.evaluate(
+        () => document.querySelector("body").innerHTML
+      );
+      const count = (data.match(/rendiauto/g) || []).length;
+      const carsAmount = count;
+      console.log(carsAmount);
+      //const root = HTMLParser.parse(data);
+    }
+  });*/
+  ////////////////////////////////////////////////////////////
 
   for (let i = 1; i < hrefs; i++) {
     // changes page to individual car page
@@ -15,6 +32,7 @@ async function scrape() {
     );
     await page.click("#load-car-cards > div:nth-child(" + i + ") > div > a");
 
+    // car model name
     const nameElement = await page.waitForSelector(
       "body > section.detailedRentalCarHead > div > div.row.mb-5 > div > div.d-flex.flex-column.flex-xl-row.align-items-start > div.flex-fill > h3"
     );
@@ -23,22 +41,7 @@ async function scrape() {
       nameElement
     );
 
-    const priceElement = await page.waitForSelector(
-      "#standard_plan > div > div > span.plan-offer-price"
-    );
-    const carPrice = await page.evaluate(
-      (element) => element.textContent,
-      priceElement
-    );
-
-    const rentalPeriodElement = await page.waitForSelector(
-      "#monthly_period > li.attribute.active > span"
-    );
-    const carRentalPeriod = await page.evaluate(
-      (element) => element.textContent,
-      rentalPeriodElement
-    );
-
+    // car type
     const typeElement = await page.waitForSelector(
       "#technical_info > ul > li:nth-child(2) > div.value.flex-grow-1.text-left.text-lg-right"
     );
@@ -47,14 +50,7 @@ async function scrape() {
       typeElement
     );
 
-    const fuelElement = await page.waitForSelector(
-      "#technical_info > ul > li:nth-child(7) > div.value.flex-grow-1.text-left.text-lg-right"
-    );
-    const carFuel = await page.evaluate(
-      (element) => element.textContent,
-      fuelElement
-    );
-
+    // car transmission
     const transmissionElement = await page.waitForSelector(
       "#technical_info > ul > li:nth-child(3) > div.value.flex-grow-1.text-left.text-lg-right"
     );
@@ -63,6 +59,34 @@ async function scrape() {
       transmissionElement
     );
 
+    // type of fuel that car uses
+    const fuelElement = await page.waitForSelector(
+      "#technical_info > ul > li:nth-child(7) > div.value.flex-grow-1.text-left.text-lg-right"
+    );
+    const carFuel = await page.evaluate(
+      (element) => element.textContent,
+      fuelElement
+    );
+
+    // car price for renting
+    const priceElement = await page.waitForSelector(
+      "#standard_plan > div > div > span.plan-offer-price"
+    );
+    const carPrice = await page.evaluate(
+      (element) => element.textContent,
+      priceElement
+    );
+
+    // car rental period
+    const rentalPeriodElement = await page.waitForSelector(
+      "#monthly_period > li.attribute.active > span"
+    );
+    const carRentalPeriod = await page.evaluate(
+      (element) => element.textContent,
+      rentalPeriodElement
+    );
+
+    // current url
     const url = await page.url();
 
     carArray.push({
